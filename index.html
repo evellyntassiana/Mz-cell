@@ -191,7 +191,7 @@ document.addEventListener('change',e=>{const d=e.target.dataset;
  if(d.pv){const[k,i]=d.pv.split(':');D[k][+i].prev=e.target.value;save();render();return}if('logo' in d){logoUp(e.target.files[0]);return}if('rs' in d){restore(e.target.files[0]);e.target.value='';return}if(d.y){Y=+e.target.value;render();return}if(d.cm){CM=e.target.value;render();return}if(d.cfg){D.cfg[d.cfg]=e.target.value}else return;save();render()});
 const REC={vend:r=>N(r.pago),cons:r=>N(r.pago),ped:r=>N(r.venda),aplic:r=>N(r.val),fiado:r=>N(r.pago)};
 const CAT={vend:'Venda',cons:'Conserto',ped:'Película/Acessório',aplic:'Película/Acessório',fiado:'Outros'};
-const REST={vend:r=>N(r.val)-N(r.pago)-N(r.tpegou),cons:r=>N(r.vp)+N(r.mo)-N(r.pago),fiado:r=>N(r.val)-N(r.pago)};
+const REST={vend:r=>N(r.val)-N(r.pago)-N(r.tpegou),cons:r=>r.st==='Aguardando'?0:N(r.vp)+N(r.mo)-N(r.pago),fiado:r=>N(r.val)-N(r.pago)};
 const today=()=>new Date().toISOString().slice(0,10);
 function post(k,r){const due=REC[k](r)-N(r.cxv);if(due>0){D.caixa.push({data:today(),tipo:'Entrada',cat:CAT[k],desc:[r.cli,r.ap||r.mod||r.serv||r.desc].filter(Boolean).join(' – '),forma:r.fp||r.pg||'',val:due});r.cxv=N(r.cxv)+due}}
 function debts(){const o=[];['vend','cons','fiado'].forEach(k=>D[k].forEach((r,i)=>{const x=REST[k](r);if(r.cli&&x>0)o.push({k,i,cli:r.cli,tel:r.tel,d:r.ap||r.desc||r.serv||'',prev:r.prev||'',x})}));return o}
